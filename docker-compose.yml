@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  api1:
+    build: .
+    container_name: fastapi_1
+    ports:
+      - "8001:80"
+    networks:
+      - statnet
+
+  api2:
+    build: .
+    container_name: fastapi_2
+    ports:
+      - "8002:80"
+    networks:
+      - statnet
+
+  nginx:
+    image: nginx:stable
+    container_name: fastap_lb
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api1
+      - api2
+    networks:
+      - statnet
+
+networks:
+  statnet:
+
+
